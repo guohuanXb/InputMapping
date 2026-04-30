@@ -1,37 +1,55 @@
 using System.Collections.Generic;
-using System.Linq;
 using Framework;
+using UnityEngine.InputSystem;
 
 namespace Example
 {
+
+    public class BindingData
+    {
+        public string ActionName { get;private set; }
+        public string BindingName { get; private set; }
+        
+        public int BindingIndex { get; private set; }
+        
+        public BindableProperty<string> BindingPath { get;set; }
+
+        public BindingData(string actionName, string bindingName, int bindingIndex ,string bindingPath)
+        {
+            ActionName = actionName;
+            BindingName = bindingName;
+            BindingIndex = bindingIndex;
+            BindingPath = new(){Value = bindingPath};
+        }
+    }
+    
+    
+
     public interface IInputMappingModel : IModel
     {
-        BindableProperty<string> GetBinding(string actionName);
-        bool HasBinding(string actionName);
-        IEnumerable<string> ActionNames { get; }
+        void SetBindingData(BindingData data);
+        BindingData GetBindingData(string actionName, int bindingIndex);
+        IEnumerable<BindingData> GetAllBindingDataForAction(string actionName);
     }
 
     public class InputMappingModel : AbstractModel, IInputMappingModel
     {
-        private Dictionary<string, BindableProperty<string>> _bindings = new();
-
         protected override void OnInit() { }
 
-        public BindableProperty<string> GetBinding(string actionName)
+        private List<BindingData> _bindings = new List<BindingData>();
+        public void SetBindingData(BindingData data)
         {
-            if (!_bindings.TryGetValue(actionName, out var prop))
-            {
-                prop = new BindableProperty<string>();
-                _bindings[actionName] = prop;
-            }
-            return _bindings[actionName];
+            _bindings.Add(data);
         }
 
-        public bool HasBinding(string actionName)
+        public BindingData GetBindingData(string actionName, int bindingIndex)
         {
-            return _bindings.ContainsKey(actionName);
+            return _bindings.Find(b => b.ActionName == actionName && b.BindingIndex == bindingIndex);
         }
 
-        public IEnumerable<string> ActionNames => _bindings.Keys.ToList();
+        public IEnumerable<BindingData> GetAllBindingDataForAction(string actionName)
+        {
+            return _bindings.FindAll(b => b.ActionName == actionName);
+        }
     }
 }

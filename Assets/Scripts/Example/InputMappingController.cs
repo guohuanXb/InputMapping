@@ -24,12 +24,13 @@ namespace Example
             var system = this.GetSystem<IPlayerInputSystem>();
             system.Initialize(map);
             
-            foreach (var action in map)
-            {
-                var row = Instantiate(bindingRowPrefab, bindingListContainer);
-                var rowController = row.GetComponent<BindingRowController>();
-                rowController.Setup(action.name);
-            }
+            // foreach (var action in map)
+            // {
+            //     var row = Instantiate(bindingRowPrefab, bindingListContainer);
+            //     var rowController = row.GetComponent<BindingRowController>();
+            //     rowController.Setup(action.name);
+            // }
+            
             // foreach (var actionMap in inputActionAsset.actionMaps)
             // {
             //     foreach (var action in actionMap.actions)
@@ -46,19 +47,19 @@ namespace Example
 
         private void Start()
         {
-            resetAllButton.onClick.AddListener(() =>
-            {
-                this.SendCommand<ResetAllBindingsCommand>();
-            });
-
-            if (rebindCancelButton != null)
-            {
-                rebindCancelButton.onClick.AddListener(() =>
-                {
-                    var system = this.GetSystem<IPlayerInputSystem>();
-                    system.CancelRebind();
-                });
-            }
+            // resetAllButton.onClick.AddListener(() =>
+            // {
+            //     this.SendCommand<ResetAllBindingsCommand>();
+            // });
+            //
+            // if (rebindCancelButton != null)
+            // {
+            //     rebindCancelButton.onClick.AddListener(() =>
+            //     {
+            //         var system = this.GetSystem<IPlayerInputSystem>();
+            //         system.CancelRebind();
+            //     });
+            // }
         }
 
         private void OnRebindStateChanged(RebindStateChangedEvent e)
@@ -75,11 +76,11 @@ namespace Example
 
         private void OnDestroy()
         {
-            var system = this.GetSystem<IPlayerInputSystem>();
-            if (system.IsRebinding)
-            {
-                system.CancelRebind();
-            }
+            // var system = this.GetSystem<IPlayerInputSystem>();
+            // if (system.IsRebinding)
+            // {
+            //     system.CancelRebind();
+            // }
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Framework;
 using TMPro;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace Example
         //[SerializeField] private Button resetButton;
 
         private string _actionName;
+        private List<BindableProperty<string>> _subscribedOverrides = new();
 
         public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 
@@ -25,13 +27,17 @@ namespace Example
             bindingText.text = system.GetBindingDisplayName(actionName);
 
             var model = this.GetModel<IInputMappingModel>();
-            model.GetBinding(actionName).OnValueChanged += OnBindingChanged;
+            foreach (var bindingData in model.GetAllBindingDataForAction(actionName))
+            {
+                bindingData.OverridePath.OnValueChanged += OnOverrideChanged;
+                _subscribedOverrides.Add(bindingData.OverridePath);
+            }
 
             rebindButton.onClick.AddListener(OnRebindClick);
             //resetButton.onClick.AddListener(OnResetClick);
         }
 
-        private void OnBindingChanged(string newPath)
+        private void OnOverrideChanged(string newPath)
         {
             var system = this.GetSystem<IPlayerInputSystem>();
             bindingText.text = system.GetBindingDisplayName(_actionName);
@@ -52,11 +58,11 @@ namespace Example
 
         private void OnDestroy()
         {
-            var model = this.GetModel<IInputMappingModel>();
-            if (model.HasBinding(_actionName))
+            foreach (var prop in _subscribedOverrides)
             {
-                model.GetBinding(_actionName).OnValueChanged -= OnBindingChanged;
+                prop.OnValueChanged -= OnOverrideChanged;
             }
+            _subscribedOverrides.Clear();
         }
     }
 }
