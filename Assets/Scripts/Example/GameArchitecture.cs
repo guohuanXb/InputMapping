@@ -1,4 +1,7 @@
-using Framework;
+using Example.Model_Class;
+using Example.System_Class;
+using Example.Utility_Class;
+using VFramework;
 
 namespace Example
 {
@@ -6,8 +9,9 @@ namespace Example
     {
         protected override void Init()
         {
-            RegisterModel<IInputMappingModel>(new InputMappingModel());
             RegisterUtility<IStorage>(new PlayerPrefsStore());
+            RegisterUtility<IResourcesStore>(new ResourcesStorage());
+            RegisterModel<IInputMappingModel>(new InputMappingModel());
             RegisterSystem<IPlayerInputSystem>(new PlayerInputSystem());
         }
     }

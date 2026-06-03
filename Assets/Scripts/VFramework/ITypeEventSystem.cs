@@ -1,0 +1,6 @@
+﻿using System;
+
+namespace VFramework
+{
+    
+}

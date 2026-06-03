@@ -146,7 +146,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 218578169983308602}
-  - component: {fileID: 8735699030808797216}
+  - component: {fileID: 4905040626587171278}
   m_Layer: 5
   m_Name: BindingRow
   m_TagString: Untagged
@@ -172,10 +172,10 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 94.18713, y: 0}
-  m_SizeDelta: {x: 288.5559, y: 100}
+  m_AnchoredPosition: {x: 140.7124, y: 0}
+  m_SizeDelta: {x: 381.6064, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &8735699030808797216
+--- !u!114 &4905040626587171278
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,12 +184,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2840616101901015904}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76bc908f428d9474f8016e1bd258e679, type: 3}
+  m_Script: {fileID: 11500000, guid: fdccf6cea56c4b8d861824dad2e70b00, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Example.BindingRowController
-  actionLabel: {fileID: 3253487501145205267}
-  bindingText: {fileID: 7792304626260188593}
-  rebindButton: {fileID: 2568654120242965308}
+  m_EditorClassIdentifier: Assembly-CSharp::Example.Controller_Class.Component.RowComponent
+  rowTitle: {fileID: 3253487501145205267}
+  rowValue: {fileID: 7792304626260188593}
+  rowButton: {fileID: 2568654120242965308}
 --- !u!1 &4017151635576189647
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,8 +226,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 86.6, y: 0}
-  m_SizeDelta: {x: 99.04, y: 50}
+  m_AnchoredPosition: {x: 95.402, y: 0}
+  m_SizeDelta: {x: 190.8, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5988129619297005327
 CanvasRenderer:
@@ -323,7 +323,7 @@ GameObject:
   - component: {fileID: 4125742194705290412}
   - component: {fileID: 3253487501145205267}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: BindingTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
