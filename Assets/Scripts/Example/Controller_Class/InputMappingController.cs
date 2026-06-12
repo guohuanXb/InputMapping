@@ -12,7 +12,7 @@ namespace Example.Controller_Class
     public class InputMappingController : MonoBehaviour,IController
     {
         public IArchitecture GetArchitecture()
-            => GameArchitecture.Interface;
+            => HotUpdateEntry.Architecture;
         private Dictionary<string,List<RowComponent>> _componentDic = new();
         public RowComponent rowPrefabs;
         public Transform container;
