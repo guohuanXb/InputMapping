@@ -50,12 +50,6 @@ namespace VFramework
         {
             return self.GetArchitecture().GetSystem<T>();
         }
-        
-        
-        public static void SendCommand<T>(this ISendCommand self) where T : ICommand, new()
-        {
-            self.GetArchitecture().SendCommand<T>(new T());
-        }
     
         public static void SendCommand<T>(this ISendCommand self,T command) where T : ICommand
         {

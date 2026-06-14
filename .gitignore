@@ -107,3 +107,10 @@ InitTestScene*.unity*
 
 #Samples
 /[Aa]ssets/[Ss]amples
+
+#YooAsset
+/[Bb]undles
+/[Aa]ssets/[Ss]treamingAssets/[Yy]oo
+
+#HybridCLR
+/[Hh]ybridCLRData
