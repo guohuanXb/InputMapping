@@ -1,20 +1,8 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
-<<<<<<<< HEAD:Assets/Resources.meta
-guid: ee4a84d339bf93f43b7a8501d91849c3
-========
-guid: a0a1dad0483e1a94b83ed4853b4c792b
->>>>>>>> 54365e7271d5718ee67fcf830ddf69327fee7a7b:Assets/Prefabs/HotUpdate.meta
-=======
-<<<<<<<< HEAD:Assets/Scenes/HotUpdate.meta
-guid: d81aac94e2319044f9e45a0515b8b2d0
-========
 guid: f0fba839ea29c4c429914d3221e0c444
->>>>>>>> 54365e7271d5718ee67fcf830ddf69327fee7a7b:Assets/Resources.meta
->>>>>>> 54365e7271d5718ee67fcf830ddf69327fee7a7b
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
+  userData:
+  assetBundleName:
+  assetBundleVariant:

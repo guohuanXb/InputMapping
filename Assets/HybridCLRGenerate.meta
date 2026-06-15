@@ -1,12 +1,8 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Prefabs/Native.meta
-guid: ab731e4e349097b48bb66ae8ee62c88a
-========
 guid: c6f6422379577974e82f1e9f5295fc38
->>>>>>>> 54365e7271d5718ee67fcf830ddf69327fee7a7b:Assets/HybridCLRGenerate.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
+  userData:
+  assetBundleName:
+  assetBundleVariant:

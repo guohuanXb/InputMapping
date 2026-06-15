@@ -1,16 +1,8 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
-<<<<<<<< HEAD:Assets/Scenes/HotUpdate.meta
-guid: d81aac94e2319044f9e45a0515b8b2d0
-========
-guid: f0fba839ea29c4c429914d3221e0c444
->>>>>>>> 54365e7271d5718ee67fcf830ddf69327fee7a7b:Assets/Resources.meta
-=======
 guid: eda22da5a6d19704fbd30846fb63aa07
->>>>>>> 54365e7271d5718ee67fcf830ddf69327fee7a7b
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
+  userData:
+  assetBundleName:
+  assetBundleVariant:
