@@ -1,5 +1,17 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+<<<<<<<< HEAD:Assets/Prefabs/HotUpdate.meta
+guid: ad521226aeecaca40ac2183296d987b3
+========
+guid: bd86db0e58be5ee48aa6caae9be953a0
+>>>>>>>> 54365e7271d5718ee67fcf830ddf69327fee7a7b:Assets/ArtResources.meta
+=======
+<<<<<<<< HEAD:Assets/Resources.meta
+guid: ee4a84d339bf93f43b7a8501d91849c3
+========
 guid: a0a1dad0483e1a94b83ed4853b4c792b
+>>>>>>>> 54365e7271d5718ee67fcf830ddf69327fee7a7b:Assets/Prefabs/HotUpdate.meta
+>>>>>>> 54365e7271d5718ee67fcf830ddf69327fee7a7b
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

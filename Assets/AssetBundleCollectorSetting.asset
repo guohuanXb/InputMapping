@@ -14,24 +14,71 @@ MonoBehaviour:
   m_EditorClassIdentifier: YooAsset.Editor::YooAsset.Editor.AssetBundleCollectorSetting
   ShowPackageView: 1
   ShowEditorAlias: 0
+<<<<<<< HEAD
+  UniqueBundleName: 1
+  Packages:
+  - PackageName: DefaultPackage
+    PackageDesc: 
+    EnableAddressable: 0
+=======
   UniqueBundleName: 0
   Packages:
   - PackageName: DefaultPackage
     PackageDesc: 
     EnableAddressable: 1
+>>>>>>> 54365e7271d5718ee67fcf830ddf69327fee7a7b
     SupportExtensionless: 1
     LocationToLower: 0
     IncludeAssetGUID: 0
     AutoCollectShaders: 1
     IgnoreRuleName: NormalIgnoreRule
     Groups:
+<<<<<<< HEAD
+    - GroupName: Prefabs
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Prefabs/HotUpdate
+        CollectorGUID: ad521226aeecaca40ac2183296d987b3
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectPrefab
+        AssetTags: 
+        UserData: 
+    - GroupName: Scenes
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Scenes/HotUpdate
+        CollectorGUID: d81aac94e2319044f9e45a0515b8b2d0
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectScene
+        AssetTags: 
+        UserData: 
+    - GroupName: Scripts
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors: []
+=======
+>>>>>>> 54365e7271d5718ee67fcf830ddf69327fee7a7b
     - GroupName: Shader
       GroupDesc: 
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
+<<<<<<< HEAD
+      - CollectPath: 
+        CollectorGUID: 
+=======
       - CollectPath: Assets/ArtResources/Shader/HotUpdate
         CollectorGUID: 012f8416008b5a74fb00a4e4eef16017
+>>>>>>> 54365e7271d5718ee67fcf830ddf69327fee7a7b
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
@@ -43,14 +90,21 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
+<<<<<<< HEAD
+      - CollectPath: Assets/Sprite/HotUpdate
+        CollectorGUID: 58979f4243049554e824b490361c78b0
+=======
       - CollectPath: Assets/ArtResources/Sprite/HotUpdate
         CollectorGUID: 34381012ea51aa4479fcb8850cd52ba4
+>>>>>>> 54365e7271d5718ee67fcf830ddf69327fee7a7b
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
         FilterRuleName: CollectSprite
         AssetTags: 
         UserData: 
+<<<<<<< HEAD
+=======
     - GroupName: Prefabs
       GroupDesc: 
       AssetTags: 
@@ -90,3 +144,4 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+>>>>>>> 54365e7271d5718ee67fcf830ddf69327fee7a7b
