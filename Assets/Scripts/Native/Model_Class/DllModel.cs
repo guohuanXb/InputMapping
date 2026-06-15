@@ -15,10 +15,10 @@ namespace Native
         {
             AotAllName = new()
             {
-                "Unity.InputSystem.dll",
-                "UnityEngine.CoreModule.dll",
-                "VFramework.dll",
-                "mscorlib.dll"
+                "Unity.InputSystem",
+                "UnityEngine.CoreModule",
+                "VFramework",
+                "mscorlib"
             };
             HotUpdateDllName = "HotUpdate";
         }

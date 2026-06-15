@@ -18,7 +18,7 @@ namespace Native
         protected override async UniTask OnExecute()
         {
             var hotUpdateSystem = this.GetSystem<IHotUpdateSystem>();
-            var dllModel = this.GetModel<DllModel>();
+            var dllModel = this.GetModel<IDllModel>();
             Dictionary<string, byte[]> aotDllDic = new();
             //6. 加载程序集文件
             foreach (var dllName in dllModel.AotAllName)

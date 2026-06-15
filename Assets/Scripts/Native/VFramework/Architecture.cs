@@ -61,18 +61,6 @@ namespace VFramework
         protected virtual void OnDeinit()
         {
         }
-
-        // public static void Register<T>(T instance) where T:class
-        // {
-        //     MakeSureArchitecture();
-        //     _instance._container.Register(instance);
-        // }
-        //
-        // public static T Get<T>() where T : class
-        // {
-        //     MakeSureArchitecture();
-        //     return _instance._container.Get<T>();
-        // }
         
         public void RegisterSystem<TSystem>(TSystem system) where TSystem :ISystem 
         {

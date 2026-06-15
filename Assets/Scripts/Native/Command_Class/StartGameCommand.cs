@@ -22,7 +22,7 @@ namespace Native
         void InvokeDependencyRegister()
         {
             var hotUpdateAss = this.GetSystem<IHotUpdateSystem>().HotUpdateAssembly;
-            var type = hotUpdateAss.GetType("HotUpdateEntry");
+            var type = hotUpdateAss.GetType("Example.HotUpdateEntry");
             type?.GetMethod("DependencyRegister")?.Invoke(null, null);
         }
 

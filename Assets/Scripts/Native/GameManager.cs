@@ -10,7 +10,7 @@ namespace Native
             RegisterModel<IPackageModel>(new PackageModel());
             RegisterModel<IDllModel>(new DllModel());
             RegisterModel<IServerConfigModel>(new ServerConfigModel());
-            RegisterSystem<IResourceSystem<ResourcePackage,DownloaderOperation>>(new YooAssetResourceSystem());
+            RegisterSystem<IResourceSystem<ResourcePackage,ResourceDownloaderOperation>>(new YooAssetResourceSystem());
             RegisterSystem<IHotUpdateSystem>(new HybridClrSystem());
         }
     }

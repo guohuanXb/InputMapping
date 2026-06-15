@@ -9,7 +9,6 @@ namespace Example.System_Class
     public interface IPlayerInputSystem : ISystem
     {
         bool IsRebinding { get; }
-
         void BeginRebind(string actionName);
         void BeginRebind(string actionName, int bindingIndex);
         void CancelRebind();

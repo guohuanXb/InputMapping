@@ -60,7 +60,7 @@ namespace Native
 
         UniTask LoadSceneAsync(string packageName,SceneConfig config);
     }
-    public class YooAssetResourceSystem :AbstractSystem,IResourceSystem<ResourcePackage,DownloaderOperation>
+    public class YooAssetResourceSystem :AbstractSystem,IResourceSystem<ResourcePackage,ResourceDownloaderOperation>
     {
         private EPlayMode _mode;
         protected override void OnInit()
@@ -74,7 +74,8 @@ namespace Native
         }
         public ResourcePackage GetResourcePackage(string packageName)
         {
-            return YooAssets.TryGetPackage(packageName);
+            var package = YooAssets.TryGetPackage(packageName) ?? YooAssets.CreatePackage(packageName);
+            return package;
         }
         
 
@@ -180,14 +181,14 @@ namespace Native
             }
         }
 
-        public DownloaderOperation GetDownloader(string packageName, int downloadingMaxNum = 10, int failedTryAgain = 3)
+        public ResourceDownloaderOperation GetDownloader(string packageName, int downloadingMaxNum = 10, int failedTryAgain = 3)
         {
             var package = GetResourcePackage(packageName);
             var downloader = package.CreateResourceDownloader(downloadingMaxNum, failedTryAgain);
             return downloader;
         }
 
-        public async UniTask<bool> Download(DownloaderOperation downloader)
+        public async UniTask<bool> Download(ResourceDownloaderOperation downloader)
         {
             if (downloader.TotalDownloadCount == 0)
             {
@@ -257,6 +258,7 @@ namespace Native
             if (handle.Status == EOperationStatus.Succeed)
             {
                 Debug.Log($"加载场景{config.Location}成功!");
+                return;
             }
             Debug.LogError($"加载场景{config.Location}失败!");
         }
