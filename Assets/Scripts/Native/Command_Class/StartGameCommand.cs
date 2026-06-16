@@ -28,7 +28,7 @@ namespace Native
 
         void LoadScene()
         {
-            var resourceSystem = this.GetSystem<IResourceSystem<ResourcePackage,ResourceDownloaderOperation>>();
+            var resourceSystem = this.GetSystem<IResourceSystem>();
             resourceSystem.LoadSceneAsync(_packageName,new SceneConfig(_sceneName));
         }
     }

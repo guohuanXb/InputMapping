@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Example.Command_Class;
 using Example.Controller_Class.Component;
 using Example.Event_Class;
+using Example.Query_Class;
 using Example.System_Class;
 using UnityEngine;
 using VFramework;
@@ -11,63 +12,84 @@ namespace Example.Controller_Class
 {
     public class InputMappingController : MonoBehaviour,IController
     {
-        public IArchitecture GetArchitecture()
-            => HotUpdateEntry.Architecture;
-        private Dictionary<string,List<RowComponent>> _componentDic = new();
-        public RowComponent rowPrefabs;
-        public Transform container;
+        public IArchitecture GetArchitecture() => HotUpdateEntry.Architecture;
+        public ControlMappingComponent[] bindingComponents;
+
+        
         private void Start()
         {
-            var inputSystem = this.GetSystem<IPlayerInputSystem>();
-            this.RegisterEvent<BindingChangedEvent>(e =>
+            foreach (var comp in bindingComponents)
             {
-                if (_componentDic.TryGetValue(e.ActionName, out var list))
+                var captured = comp; // 闭包保护
+
+                // 初始化显示
+                captured.SetDisplay(
+                    this.SendQuery(new BindingNameQuery(captured.actionName, captured.bindingIndex))
+                );
+
+                // 绑定按钮
+                captured.button.onClick.AddListener(() =>
                 {
-                    if (list[e.BindingIndex] != null)
-                    {
-                        list[e.BindingIndex].rowValue.text = inputSystem.GetBindingDisplayString(e.ActionName, e.BindingIndex);
-                    }
-                }
-            });
-            this.RegisterEvent<RebindStateChangedEvent>(e =>
+                    this.SendCommand(
+                        new BeginRebindCommand(captured.actionName, captured.bindingIndex)
+                    );
+                });
+            }
+            
+            
+            this.RegisterEvent<BeginRebindEvent>(OnBeginRebinding)
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+
+            this.RegisterEvent<RebindCompleteEvent>(OnRebindCompleted)
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            
+            this.RegisterEvent<CancelRebindEvent>(OnCancelRebinding)
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            
+        }
+
+        private void OnDestroy()
+        {
+            foreach (var comp in bindingComponents)
             {
-                if (_componentDic.TryGetValue(e.ActionName, out var list))
-                {
-                    if (list[e.BindingIndex] != null)
-                    {
-                        list[e.BindingIndex].rowValue.text = e.IsRebinding
-                            ? "——"
-                            : inputSystem.GetBindingDisplayString(e.ActionName, e.BindingIndex);
-                    }
-                }
-            });
-            foreach (var action in inputSystem.GetAllInputAction())
+                comp.button.onClick.RemoveAllListeners();
+            }
+        }
+
+        private void OnBeginRebinding(BeginRebindEvent e)
+        {
+            foreach (var comp in bindingComponents)
             {
-                var bindingCount = inputSystem.GetBindingCount(action.name);
-                var list = new List<RowComponent>(bindingCount);
-                for (int i = 0; i < bindingCount; i++)
-                    list.Add(null);
-
-                for (int i = 0; i < bindingCount; i++)
+                if (comp.actionName == e.ActionName && comp.bindingIndex == e.BindingIndex)
                 {
-                    if (action.bindings[i].isComposite)
-                        continue;
-
-                    var row = Instantiate(rowPrefabs, container);
-                    var actionName = action.name;
-                    var bindingIndex = i;
-                    row.rowValue.text = inputSystem.GetBindingDisplayString(actionName, bindingIndex);
-                    row.rowTitle.text = action.bindings[bindingIndex].name == ""
-                        ? action.bindings[bindingIndex].action
-                        : action.bindings[bindingIndex].name;
-                    row.rowButton.onClick.AddListener(() =>
-                    {
-                        this.SendCommand(new BeginRebindCommand(actionName, bindingIndex));
-                    });
-                    list[bindingIndex] = row;
+                    comp.ClearDisplay();
+                    return;
                 }
+            }
+        }
 
-                _componentDic[action.name] = list;
+        private void OnRebindCompleted(RebindCompleteEvent e)
+        {
+            foreach (var comp in bindingComponents)
+            {
+                if (comp.actionName == e.ActionName && comp.bindingIndex == e.BindingIndex)
+                {
+                    comp.SetDisplay(e.DisplayContent);
+                    return;
+                }
+            }
+        }
+
+        private void OnCancelRebinding(CancelRebindEvent e)
+        {
+            foreach (var comp in bindingComponents)
+            {
+                if (comp.actionName == e.ActionName && comp.bindingIndex == e.BindingIndex)
+                {
+                    
+                    comp.SetDisplay(this.SendQuery(new BindingNameQuery(e.ActionName, e.BindingIndex)));
+                    return;
+                }
             }
         }
     }

@@ -14,7 +14,7 @@ namespace Native
 
         protected override async UniTask<ResourceDownloaderOperation> OnExecute()
         {
-            var resourceSystem = this.GetSystem<IResourceSystem<ResourcePackage, ResourceDownloaderOperation>>();
+            var resourceSystem = this.GetSystem<IResourceSystem>();
             var config = this.GetModel<IServerConfigModel>().ServerPath;
             
             //1. 初始化资源包

@@ -3,6 +3,7 @@ using Example.Event_Class;
 using Example.Utility_Class;
 using UnityEngine.InputSystem;
 using VFramework;
+using Image = UnityEngine.UI.Image;
 
 namespace Example.System_Class
 {
@@ -33,9 +34,7 @@ namespace Example.System_Class
         private InputActionRebindingExtensions.RebindingOperation _currentRebind;
         private string _currentRebindActionName;
         private int _currentRebindBindingIndex;
-
         public bool IsRebinding => _currentRebind != null;
-
         protected override void OnInit()
         {
             _actionAsset = this.GetUtility<IResourcesStore>()
@@ -66,17 +65,13 @@ namespace Example.System_Class
             var action = _actionMap.FindAction(actionName);
             if (action == null) return;
             if (bindingIndex < 0 || bindingIndex >= action.bindings.Count) return;
+            
+            this.SendEvent(new BeginRebindEvent(actionName, bindingIndex));
+            
             _currentRebindActionName = actionName;
             _currentRebindBindingIndex = bindingIndex;
             action.Disable();
-
-            this.SendEvent(new RebindStateChangedEvent
-            {
-                ActionName = actionName,
-                BindingIndex = bindingIndex,
-                IsRebinding = true
-            });
-
+            
             _currentRebind = action.PerformInteractiveRebinding(bindingIndex)
                 .WithCancelingThrough("<Keyboard>/escape")
                 .OnComplete(OnRebindComplete)
@@ -91,12 +86,10 @@ namespace Example.System_Class
 
             action.ApplyBindingOverride(_currentRebindBindingIndex, new InputBinding { overridePath = newPath });
             action.Enable();
-            this.SendEvent(new BindingChangedEvent
-            {
-                ActionName = _currentRebindActionName,
-                BindingIndex = _currentRebindBindingIndex,
-                NewPath = newPath
-            });
+
+            var display = GetBindingDisplayString(_currentRebindActionName, _currentRebindBindingIndex);
+            this.SendEvent(new RebindCompleteEvent(_currentRebindActionName,_currentRebindBindingIndex,
+                display));
 
             CleanupRebind();
             SaveOverrides();
@@ -107,19 +100,13 @@ namespace Example.System_Class
             var action = _actionMap.FindAction(_currentRebindActionName);
             action?.Enable();
             CleanupRebind();
+            this.SendEvent(new CancelRebindEvent(_currentRebindActionName,_currentRebindBindingIndex));
         }
 
         private void CleanupRebind()
         {
             _currentRebind?.Dispose();
             _currentRebind = null;
-
-            this.SendEvent(new RebindStateChangedEvent
-            {
-                ActionName = _currentRebindActionName,
-                BindingIndex = _currentRebindBindingIndex,
-                IsRebinding = false
-            });
         }
 
         public void CancelRebind()
@@ -134,12 +121,8 @@ namespace Example.System_Class
 
             action.RemoveBindingOverride(bindingIndex);
 
-            this.SendEvent(new BindingChangedEvent
-            {
-                ActionName = actionName,
-                BindingIndex = bindingIndex,
-                NewPath = action.bindings[bindingIndex].path
-            });
+            var display = GetBindingDisplayString(actionName, bindingIndex);
+            this.SendEvent(new RebindCompleteEvent(actionName,bindingIndex,display));
 
             SaveOverrides();
         }
@@ -169,7 +152,7 @@ namespace Example.System_Class
                 return string.Empty;
 
             var path = action.bindings[bindingIndex].effectivePath;
-            return InputControlPath.ToHumanReadableString(path, InputControlPath.HumanReadableStringOptions.OmitDevice);
+            return InputControlPath.ToHumanReadableString(path, InputControlPath.HumanReadableStringOptions.UseShortNames);
         }
 
         public InputAction GetInputAction(string actionName)

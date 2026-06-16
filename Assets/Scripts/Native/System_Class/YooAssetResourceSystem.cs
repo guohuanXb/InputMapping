@@ -47,20 +47,20 @@ namespace Native
         }
     }
 
-    public interface IResourceSystem<TPackage,TDownload> :ISystem
+    public interface IResourceSystem :ISystem
     {
-        TPackage GetResourcePackage(string packageName);
+        ResourcePackage GetResourcePackage(string packageName);
         UniTask Initialize(string packageName,AssetServerConfig config = default);
         UniTask<string> RequestPackageVersion(string packageName);
         UniTask<bool> UpdatePackageManifest(string packageName, string packageVersion);
-        TDownload GetDownloader(string packageName, int downloadingMaxNum = 10, int failedTryAgain = 3);
-        UniTask<bool> Download(TDownload downloader);
+        ResourceDownloaderOperation GetDownloader(string packageName, int downloadingMaxNum = 10, int failedTryAgain = 3);
+        UniTask<bool> Download(ResourceDownloaderOperation downloader);
         UniTask DestroyPackage(string packageName);
         UniTask<TOut> LoadAssetAsync<TOut>(string location,string packageName) where TOut : Object;
 
         UniTask LoadSceneAsync(string packageName,SceneConfig config);
     }
-    public class YooAssetResourceSystem :AbstractSystem,IResourceSystem<ResourcePackage,ResourceDownloaderOperation>
+    public class YooAssetResourceSystem :AbstractSystem,IResourceSystem
     {
         private EPlayMode _mode;
         protected override void OnInit()

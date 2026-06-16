@@ -14,7 +14,7 @@ namespace Native
 
         protected override async UniTask<bool> OnExecute()
         {
-            var resourceSystem = this.GetSystem<IResourceSystem<ResourcePackage, ResourceDownloaderOperation>>();
+            var resourceSystem = this.GetSystem<IResourceSystem>();
             // 5. 开始下载
             var result = await resourceSystem.Download(_downloader);
             return result;

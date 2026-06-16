@@ -35,7 +35,7 @@ namespace Native
         
         async UniTask<byte[]> LoadDllFile(string dllName)
         {
-            var resourceSystem = this.GetSystem<IResourceSystem<ResourcePackage, ResourceDownloaderOperation>>();
+            var resourceSystem = this.GetSystem<IResourceSystem>();
             var text = await resourceSystem.LoadAssetAsync<TextAsset>(dllName, _packageName);
             if (text == null || text.bytes == null || text.bytes.Length == 0)
             {
