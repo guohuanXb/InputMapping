@@ -36,13 +36,17 @@ namespace Native
         async UniTask<byte[]> LoadDllFile(string dllName)
         {
             var resourceSystem = this.GetSystem<IResourceSystem>();
-            var text = await resourceSystem.LoadAssetAsync<TextAsset>(dllName, _packageName);
+            var handle = await resourceSystem.LoadAssetAsync<TextAsset>(dllName, _packageName);
+            var text = handle.AssetObject as TextAsset;
             if (text == null || text.bytes == null || text.bytes.Length == 0)
             {
                 Debug.LogError($"{dllName} Dll加载异常");
+                handle?.Release();
                 return null;
             }
-            return text.bytes;
+            var bytes = text.bytes;
+            handle.Release();        // 提取 bytes 后立即释放
+            return bytes;
         }
     }
 }

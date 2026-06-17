@@ -56,8 +56,7 @@ namespace Native
         ResourceDownloaderOperation GetDownloader(string packageName, int downloadingMaxNum = 10, int failedTryAgain = 3);
         UniTask<bool> Download(ResourceDownloaderOperation downloader);
         UniTask DestroyPackage(string packageName);
-        UniTask<TOut> LoadAssetAsync<TOut>(string location,string packageName) where TOut : Object;
-
+        UniTask<AssetHandle> LoadAssetAsync<TOut>(string location,string packageName) where TOut : Object;
         UniTask LoadSceneAsync(string packageName,SceneConfig config);
     }
     public class YooAssetResourceSystem :AbstractSystem,IResourceSystem
@@ -236,7 +235,7 @@ namespace Native
         }
         
 
-        public async UniTask<TOut> LoadAssetAsync<TOut>(string location,string packageName) where TOut : Object
+        public async UniTask<AssetHandle> LoadAssetAsync<TOut>(string location,string packageName) where TOut : Object
         {
             var package = GetResourcePackage(packageName);
             AssetHandle handle = package.LoadAssetAsync<TOut>(location);
@@ -244,11 +243,13 @@ namespace Native
             if (handle.Status == EOperationStatus.Succeed)
             {
                 Debug.Log($"加载资源{location}成功!");
-                return handle.AssetObject as TOut;
+                return handle;
             }
             Debug.LogError($"加载资源{location}失败!");
             return null;
         }
+
+        
 
         public async UniTask LoadSceneAsync(string packageName,SceneConfig config)
         {
