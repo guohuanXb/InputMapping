@@ -6,6 +6,7 @@ namespace Native.UIKit.Framework
 {
     public interface IUIManager : ISystem
     {
+        UniTask InstantiateLayer();
         UniTask LoadPanelAsync<T>() where T : IPanel;
         T GetPanel<T>() where T : IPanel;
         T OpenPanel<T>() where T : IPanel;

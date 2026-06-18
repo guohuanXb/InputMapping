@@ -23,8 +23,10 @@
     public class PanelConfig
     {
         public string PackageName;
+        /// <summary>
+        /// 约定使用PanelPrefab的Name作为Location
+        /// </summary>
         public string Location;
-        public string PanelName;
     }
     
     public class PanelData
