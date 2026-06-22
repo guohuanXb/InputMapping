@@ -117,3 +117,5 @@ InitTestScene*.unity*
 
 #Ignore UnityEngine Version
 /P[p]rojectSettings/P[p]rojectVersion.txt 
+
+/[Aa]ssets/[Ee]xternalAsset

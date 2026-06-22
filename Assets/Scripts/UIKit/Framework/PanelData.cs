@@ -1,4 +1,6 @@
-﻿namespace Native.UIKit.Framework
+﻿using YooAsset;
+
+namespace Native.UIKit.Framework
 {
     public enum PanelState
     {
@@ -7,17 +9,13 @@
         /// </summary>
         UnLoad,
         /// <summary>
-        /// 已加载，但未打开
+        /// 已加载
         /// </summary>
-        Loaded,     
+        Loaded,   
         /// <summary>
-        /// 打开状态
+        /// 已实例化
         /// </summary>
-        Opened,   
-        /// <summary>
-        /// 关闭状态
-        /// </summary>
-        Closed,     
+        Instantiated,
     }
     
     public class PanelConfig
@@ -31,16 +29,22 @@
     
     public class PanelData
     {
-        public PanelData(PanelState state, PanelConfig config, bool isFocus)
+        public PanelData(PanelState state, PanelConfig config,bool isOpened = false ,bool isFocus = false)
         {
             State = state;
             Config = config;
+            IsOpened = isOpened;
             IsFocus = isFocus;
+            Handle = null;
+            Panel = null;
         }
 
         public PanelState State { get; set; }
-        public PanelConfig Config { get; set;}
-        public bool IsFocus { get; set; }
         
+        public bool IsFocus { get; set; }
+        public bool IsOpened { get; set; }
+        public PanelConfig Config { get; set;}
+        public AssetHandle Handle { get; set;}
+        public IPanel Panel { get; set;}
     }
 }

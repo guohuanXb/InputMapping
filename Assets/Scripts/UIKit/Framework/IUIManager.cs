@@ -13,5 +13,7 @@ namespace Native.UIKit.Framework
         UniTask<T> OpenPanelAsync<T>() where T : IPanel;
         void FocusPanel(IPanel panel);
         void ClosePanel<T>() where T : IPanel;
+        void RemovePanelRef<T>() where T : IPanel;
+        void UnLoadPanel<T>() where T : IPanel;
     }
 }
