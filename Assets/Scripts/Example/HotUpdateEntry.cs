@@ -13,7 +13,6 @@ namespace Example
         public static void DependencyRegister()
         {
             Architecture.RegisterUtility<IStorage>(new PlayerPrefsStore());
-            Architecture.RegisterUtility<IResourcesStore>(new ResourcesStorage());
             Architecture.RegisterModel<IInputMappingModel>(new InputMappingModel());
             Architecture.RegisterSystem<IPlayerInputSystem>(new PlayerInputSystem());
         }

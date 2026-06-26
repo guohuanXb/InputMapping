@@ -50,14 +50,31 @@ namespace Native
     public interface IResourceSystem :ISystem
     {
         ResourcePackage GetResourcePackage(string packageName);
-        UniTask Initialize(string packageName,AssetServerConfig config = default);
-        UniTask<string> RequestPackageVersion(string packageName);
-        UniTask<bool> UpdatePackageManifest(string packageName, string packageVersion);
+        UniTask<InitializationOperation> Initialize(string packageName,AssetServerConfig config = default);
+        UniTask<RequestPackageVersionOperation> RequestPackageVersion(string packageName);
+        UniTask<UpdatePackageManifestOperation> UpdatePackageManifest(string packageName, string packageVersion);
         ResourceDownloaderOperation GetDownloader(string packageName, int downloadingMaxNum = 10, int failedTryAgain = 3);
-        UniTask<bool> Download(ResourceDownloaderOperation downloader);
-        UniTask DestroyPackage(string packageName);
         UniTask<AssetHandle> LoadAssetAsync<TOut>(string location,string packageName) where TOut : Object;
-        UniTask LoadSceneAsync(string packageName,SceneConfig config);
+        UniTask<SceneHandle> LoadSceneAsync(string packageName,SceneConfig config);
+        UniTask DestroyPackage(string packageName);
+        /// <summary>
+        /// 卸载所有引用计数为零的资源包。
+        /// </summary>
+        /// <returns></returns>
+        UniTask UnloadUnUsedAssetsAsync(string packageName);
+        /// <summary>
+        /// 尝试卸载指定的资源对象
+        /// 注意：如果该资源还在被使用，该方法会无效。
+        /// </summary>
+        /// <returns></returns>
+        void TryUnloadUnusedAsset(string packageName,string location);
+        /// <summary>
+        /// 强制卸载所有资源包，该方法请在合适的时机调用。
+        /// 注意：Package在销毁的时候也会自动调用该方法。
+        /// </summary>
+        /// <returns></returns>
+        UniTask ForceUnloadAllAssets(string packageName);
+        
     }
     public class YooAssetResourceSystem :AbstractSystem,IResourceSystem
     {
@@ -78,7 +95,7 @@ namespace Native
         }
         
 
-        public async UniTask Initialize(string packageName, AssetServerConfig config = default)
+        public async UniTask<InitializationOperation> Initialize(string packageName, AssetServerConfig config = default)
         {
             var package = GetResourcePackage(packageName);
             InitializeParameters createParameters;
@@ -129,55 +146,23 @@ namespace Native
             }
             var initOperation = package.InitializeAsync(createParameters);
             await initOperation.ToUniTask();
-            if (initOperation.Status == EOperationStatus.Succeed)
-            {
-                Debug.Log("资源包初始化成功！");
-            }
-            else
-            {
-                Debug.LogError($"资源包初始化失败：{initOperation.Error}");
-            }
+            return initOperation;
         }
 
-        public async UniTask<string> RequestPackageVersion(string packageName)
+        public async UniTask<RequestPackageVersionOperation> RequestPackageVersion(string packageName)
         {
             var package = GetResourcePackage(packageName);
             var operation = package.RequestPackageVersionAsync();
             await operation.ToUniTask();
-
-            if (operation.Status == EOperationStatus.Succeed)
-            {
-                //更新成功
-                string packageVersion = operation.PackageVersion;
-                Debug.Log($"请求包裹成功 , 版本 : {packageVersion}");
-                return packageVersion;
-            }
-            else
-            {
-                //更新失败
-                Debug.LogError($"请求包裹失败！ 失败信息 : {operation.Error}");
-                return null;
-            }
+            return operation;
         }
 
-        public async UniTask<bool> UpdatePackageManifest(string packageName, string packageVersion)
+        public async UniTask<UpdatePackageManifestOperation> UpdatePackageManifest(string packageName, string packageVersion)
         {
             var package = GetResourcePackage(packageName);
             var operation = package.UpdatePackageManifestAsync(packageVersion);
             await operation.ToUniTask();
-
-            if (operation.Status == EOperationStatus.Succeed)
-            {
-                //更新成功
-                Debug.Log($"更新包裹清单成功 , 版本 : {packageVersion}");
-                return true;
-            }
-            else
-            {
-                //更新失败
-                Debug.LogError($"更新包裹清单失败！ 失败信息 : {operation.Error}");
-                return false;
-            }
+            return operation;
         }
 
         public ResourceDownloaderOperation GetDownloader(string packageName, int downloadingMaxNum = 10, int failedTryAgain = 3)
@@ -186,30 +171,7 @@ namespace Native
             var downloader = package.CreateResourceDownloader(downloadingMaxNum, failedTryAgain);
             return downloader;
         }
-
-        public async UniTask<bool> Download(ResourceDownloaderOperation downloader)
-        {
-            if (downloader.TotalDownloadCount == 0)
-            {
-                Debug.Log("没有需要更新的资源！");
-                return true;
-            }
-            Debug.Log($"需要下载{downloader.TotalDownloadCount}个文件 , 共{downloader.TotalDownloadBytes/1024f/1024f:F2} MB");
-            downloader.BeginDownload();
-            await downloader.ToUniTask();
-            
-            if (downloader.Status == EOperationStatus.Succeed)
-            {
-                Debug.Log("下载文件包裹成功！");
-                return true;
-            }
-            else
-            {
-                Debug.LogError($"下载文件包裹失败: {downloader.Error}");
-                return false;
-            }
-        }
-
+        
         public async UniTask DestroyPackage(string packageName)
         {
             var package = GetResourcePackage(packageName);
@@ -233,35 +195,44 @@ namespace Native
                 Debug.LogError("RemovePackage Fail");
             }
         }
+
+        public async UniTask UnloadUnUsedAssetsAsync(string packageName)
+        {
+            var package = GetResourcePackage(packageName);
+            var operation =  package.UnloadUnusedAssetsAsync();
+            await operation.ToUniTask();
+        }
+
+        public void TryUnloadUnusedAsset(string packageName,string location)
+        {
+            var package = GetResourcePackage(packageName);
+            package.TryUnloadUnusedAsset(location);
+        }
+
+        public async UniTask ForceUnloadAllAssets(string packageName)
+        {
+            var package = GetResourcePackage(packageName);
+            var operation = package.UnloadAllAssetsAsync();
+            await operation.ToUniTask();
+        }
+
         
+
 
         public async UniTask<AssetHandle> LoadAssetAsync<TOut>(string location,string packageName) where TOut : Object
         {
             var package = GetResourcePackage(packageName);
             AssetHandle handle = package.LoadAssetAsync<TOut>(location);
             await handle.ToUniTask();
-            if (handle.Status == EOperationStatus.Succeed)
-            {
-                Debug.Log($"加载资源{location}成功!");
-                return handle;
-            }
-            Debug.LogError($"加载资源{location}失败!");
-            return null;
+            return handle;
         }
-
         
-
-        public async UniTask LoadSceneAsync(string packageName,SceneConfig config)
+        public async UniTask<SceneHandle> LoadSceneAsync(string packageName,SceneConfig config)
         {
             var package = GetResourcePackage(packageName);
             SceneHandle handle= package.LoadSceneAsync(config.Location,config.SceneMode, config.PhysicsMode, config.SuspendLoad, config.Priority);
             await handle.ToUniTask();
-            if (handle.Status == EOperationStatus.Succeed)
-            {
-                Debug.Log($"加载场景{config.Location}成功!");
-                return;
-            }
-            Debug.LogError($"加载场景{config.Location}失败!");
+            return handle;
         }
         
     }
