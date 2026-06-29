@@ -13,8 +13,8 @@ namespace Native
         {
             ServerPath = new()
             {
-                defaultHostServer = "http://172.17.127.72/PC/v1.0",
-                fallbackHostServe = "http://172.17.127.72/PC/v1.0"
+                defaultHostServer = "http://172.17.11.104/PC/v1.0",
+                fallbackHostServe = "http://172.17.11.104/PC/v1.0"
             };
         }
 

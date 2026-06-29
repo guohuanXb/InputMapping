@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Native.Event_Class;
 using Native.UIKit.Framework;
 using VFramework;
 using YooAsset;
@@ -21,7 +22,7 @@ namespace Native
         protected override async UniTask OnExecute()
         {
             var resourceSystem = this.GetSystem<IResourceSystem>();
-            var config = new SceneConfig(_sceneName){SuspendLoad =  true};
+            var config = new SceneConfig(_sceneName);
             var sceneHandle = await resourceSystem.LoadSceneAsync(_packageName,config);
             try
             {
@@ -31,12 +32,10 @@ namespace Native
                 }
                 var uiManager = this.GetSystem<IUIManager>();
                 sceneHandle.ActivateScene();
-                var list = new List<string>()
-                {
-                    "Panel",
-                };
-                await uiManager.PreloadPanelForScene(_packageName,list);
+                var panels = uiManager.GetScenePanels(_sceneName);
+                await uiManager.PreloadPanelForScene(_packageName, panels);
                 await uiManager.InstantiateLayer();
+                this.SendEvent(new SceneReadyEvent { SceneName = _sceneName });
             }
             finally
             {
@@ -45,6 +44,6 @@ namespace Native
         }
 
 
-        
+
     }
 }

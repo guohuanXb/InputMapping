@@ -5,7 +5,7 @@ namespace Native.UIKit.Framework
 {
     public abstract class UIPanel :MonoBehaviour,IPanel
     {
-        public UILayer Layer { get;protected set; }
+        public abstract UILayer Layer { get;protected set; }
         public virtual void OnInit()
         {
             

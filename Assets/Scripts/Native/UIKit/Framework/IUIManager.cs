@@ -8,6 +8,15 @@ namespace Native.UIKit.Framework
     public interface IUIManager : ISystem
     {
         /// <summary>
+        /// 注册场景与面板的映射关系。热更层在 DependencyRegister 中调用，
+        /// 告知 UIManager 某个场景进入时需要预加载哪些面板。
+        /// </summary>
+        void RegisterScenePanels(string sceneName, List<string> panelLocations);
+        /// <summary>
+        /// 获取已注册的场景面板定位列表，未注册返回 null。
+        /// </summary>
+        List<string> GetScenePanels(string sceneName);
+        /// <summary>
         /// 为指定场景预加载所需的面板预制体。
         /// 约定：requiredPanels 中的每个条目都是 YooAsset 资源定位（即预制体名，与 PanelConfig.Location 一致）。
         /// 这些 UI 面板预制体必然挂载了继承 IPanel 的子类脚本，因此加载出 GameObject 后，

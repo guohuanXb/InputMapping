@@ -22,11 +22,15 @@ namespace Native
         }
         string IRemoteServices.GetRemoteMainURL(string fileName)
         {
-            return $"{_defaultHostServer}/{fileName}";
+            var url = $"{_defaultHostServer}/{fileName}";
+            Debug.Log($"[YooAsset] 远程请求 URL: {url}");
+            return url;
         }
         string IRemoteServices.GetRemoteFallbackURL(string fileName)
         {
-            return $"{_fallbackHostServer}/{fileName}";
+            var url = $"{_fallbackHostServer}/{fileName}";
+            Debug.Log($"[YooAsset] 回退请求 URL: {url}");
+            return url;
         }
     }
 

@@ -30,7 +30,7 @@ namespace Native
         void UpdateProgressPercentage(float value)
         {
             percentageSlider.value = value;
-            percentageText.text = value.ToString("F1");
+            percentageText.text = (value * 100).ToString("F1");
         }
 
         void UpdateProgressInfo(string info)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -24,7 +24,18 @@ namespace Native
                 Launch().Forget();
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
         }
-        
+
+        private static string FlattenException(Exception ex)
+        {
+            if (ex == null) return string.Empty;
+            var result = ex.ToString();
+            while (ex.InnerException != null)
+            {
+                ex = ex.InnerException;
+                result += $"\n  ---> (inner) {ex.Message}";
+            }
+            return result;
+        }
 
         async UniTaskVoid Launch()
         {
@@ -42,12 +53,12 @@ namespace Native
             }
             catch (Exception e)
             {
-                Debug.LogError($"{packageName} InitPackage Exception: {e.Message}");
+                Debug.LogError($"{packageName} InitPackage Exception: {FlattenException(e)}");
                 cts?.Cancel();
                 cts?.Dispose();
                 return;
             }
-            
+
             try
             {
                 // 2. 请求资源版本
@@ -64,9 +75,10 @@ namespace Native
             }
             catch (Exception e)
             {
-                errorPanel.gameObject.SetActive(true);
+                if (errorPanel != null)
+                    errorPanel.gameObject.SetActive(true);
                 this.SendCommand(new SendExceptionCommand(e.Message));
-                Debug.LogError($"{e.Message}");
+                Debug.LogError($"{FlattenException(e)}");
             }
         }
     }

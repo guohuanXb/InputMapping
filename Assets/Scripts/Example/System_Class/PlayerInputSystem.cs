@@ -3,7 +3,6 @@ using Example.Event_Class;
 using Example.Utility_Class;
 using UnityEngine.InputSystem;
 using VFramework;
-using Image = UnityEngine.UI.Image;
 
 namespace Example.System_Class
 {

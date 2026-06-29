@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Reflection;
 using HybridCLR;
 using UnityEngine;
@@ -38,7 +39,8 @@ namespace Native
         public void LoadHotUpdateAssembly(string hotUpdateDllName,byte[] dllBytes)
         {
 #if UNITY_EDITOR
-            HotUpdateAssembly = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == hotUpdateDllName);
+            var assemblyName = Path.GetFileNameWithoutExtension(hotUpdateDllName);
+            HotUpdateAssembly = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == assemblyName);
             Debug.Log($"成功加载元数据: {hotUpdateDllName}");
             
 #else

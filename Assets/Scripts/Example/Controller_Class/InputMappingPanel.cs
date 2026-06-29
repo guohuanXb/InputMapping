@@ -5,17 +5,17 @@ using Example.Controller_Class.Component;
 using Example.Event_Class;
 using Example.Query_Class;
 using Example.System_Class;
+using Native.UIKit.Framework;
 using UnityEngine;
 using VFramework;
 
 namespace Example.Controller_Class
 {
-    public class InputMappingController : MonoBehaviour,IController
+    public class InputMappingPanel : UIPanel,IController
     {
         public IArchitecture GetArchitecture() => HotUpdateEntry.Architecture;
         public ControlMappingComponent[] bindingComponents;
-
-        
+        public override UILayer Layer { get; protected set; } = UILayer.First;
         private void Start()
         {
             foreach (var comp in bindingComponents)
@@ -92,5 +92,8 @@ namespace Example.Controller_Class
                 }
             }
         }
+
+
+        
     }
 }

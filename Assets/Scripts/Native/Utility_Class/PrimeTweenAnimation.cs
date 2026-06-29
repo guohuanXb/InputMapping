@@ -13,7 +13,7 @@ namespace Native.Utility_Class
             var tween = Tween.Alpha(canvasGroup,endValue,duration);
             try
             {
-                await tween.ToUniTask(cancellationToken:ct);
+                await tween.ToYieldInstruction().ToUniTask(cancellationToken:ct);
             }
             catch (OperationCanceledException)
             {

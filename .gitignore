@@ -114,6 +114,9 @@ InitTestScene*.unity*
 
 #HybridCLR
 /[Hh]ybridCLRData
+/[Aa]ssets/[Hh]ybridCLRGenerate
+/[Aa]ssets/[Ss]criptText/*.bytes
+
 
 #Ignore UnityEngine Version
 /P[p]rojectSettings/P[p]rojectVersion.txt 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VFramework;
@@ -25,12 +26,17 @@ namespace Native.UIKit.Framework
         /// </summary>
         private Dictionary<Type,PanelData> _panelDic;
         private Dictionary<UILayer,Transform> _uiLayerDic;
+        /// <summary>
+        /// 场景→面板定位列表映射，由热更层通过 RegisterScenePanels 填充。
+        /// </summary>
+        private Dictionary<string, List<string>> _scenePanelMap;
         protected override void OnInit()
         {
             _resourceSystem = this.GetSystem<IResourceSystem>();
             _panelDic = new();
             _prefabCache = new Dictionary<Type, GameObject>();
             _uiLayerDic = new();
+            _scenePanelMap = new Dictionary<string, List<string>>();
         }
         
         
@@ -52,6 +58,31 @@ namespace Native.UIKit.Framework
         
 
         
+        public void RegisterScenePanels(string sceneName, List<string> panelLocations)
+        {
+            if (string.IsNullOrEmpty(sceneName) || panelLocations == null || panelLocations.Count == 0)
+                return;
+
+            if (!_scenePanelMap.TryGetValue(sceneName, out var list))
+            {
+                list = new List<string>();
+                _scenePanelMap[sceneName] = list;
+            }
+
+            foreach (var location in panelLocations)
+            {
+                if (!string.IsNullOrEmpty(location) && !list.Contains(location))
+                    list.Add(location);
+            }
+        }
+
+        public List<string> GetScenePanels(string sceneName)
+        {
+            if (string.IsNullOrEmpty(sceneName) || !_scenePanelMap.TryGetValue(sceneName, out var list))
+                return null;
+            return list;
+        }
+
         public async UniTask PreloadPanelForScene(string packageName, List<string> requiredPanels)
         {
             if (requiredPanels == null || requiredPanels.Count == 0)
@@ -78,7 +109,7 @@ namespace Native.UIKit.Framework
             // 再通过 GetComponent<IPanel>() 拿到面板脚本 Type 作缓存键；按 Type 去重已缓存
             var errors = new List<Exception>(pending.Count);
             var loadedThisRound = new List<Type>(pending.Count);
-            await UniTask.WhenAll(pending.Select(async location =>
+            async UniTask LoadOnePanel(string location)
             {
                 AssetHandle handle = null;
                 try
@@ -125,7 +156,9 @@ namespace Native.UIKit.Framework
                     // 无论成功失败都立即释放句柄：成功时只用预制体，失败时回收已分配的引用
                     handle?.Release();
                 }
-            }));
+            }
+
+            await UniTask.WhenAll(pending.Select(LoadOnePanel));
 
             if (errors.Count > 0)
             {
@@ -143,6 +176,7 @@ namespace Native.UIKit.Framework
             _prefabCache.Clear();
             _panelDic.Clear();
             _uiLayerDic.Clear();
+            _scenePanelMap.Clear();
         }
 
 
